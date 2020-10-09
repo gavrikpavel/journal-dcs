@@ -1,0 +1,8 @@
+/node_modules
+/dist
+*.log
+.idea
+.cache
+.eslintcache
+package-lock.json
+/other
