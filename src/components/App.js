@@ -17,11 +17,16 @@ function App() {
   // Обновляем данные, если изменилась дата запроса
   useEffect(() => {
     let url = 'http://192.168.71.111/api/journal/info';
-    let requestData = {"date": date};
+    const requestData = {"date": date};
     axios.post(url, requestData)
       .then(res => {
         if (res.data) {
-            setSmenaList(res.data.smena);
+            setSmenaList(
+              res.data.smena.map(smena => {
+                smena.active = false;
+                return smena
+              })
+            );
             setInitRecords(res.data.records);
             setRecords(res.data.records);
         }
@@ -47,11 +52,32 @@ function App() {
     setDate(moment(newDate).format('YYYY-MM-DD 00:00:00'));
   }
 
+  function setActiveSmena(id) {
+    setSmenaList(
+      smenaList.map(smena => {
+        smena.active = smena.id === id;
+        return smena
+      })
+    )
+
+  }
+
   return (
-    <div>
-      <DatePicker updateDate={updateDate}/>
-      <SmenaList smenaList={smenaList} setSmenaRecords={showRecords} />
-      <RecordList records={records} />
+    <div className="journal">
+      <div className="tool-panel">
+        <DatePicker updateDate={updateDate}/>
+      </div>
+      <div className="smena">
+        <SmenaList smenaList={smenaList} setSmenaRecords={showRecords} setActive={setActiveSmena} />
+      </div>
+      <div className="record-table">
+        <RecordList records={records} />
+      </div>
+      <div className="pinned-records">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+      </div>
     </div>
   )
 }

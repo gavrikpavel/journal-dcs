@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import SmenaItem from "./SmenaItem";
 
 function SmenaList(props) {
-  return (
+    return (
     props.smenaList.map((smena) => {
       return (
         <SmenaItem
@@ -11,7 +11,10 @@ function SmenaList(props) {
           dateOut={smena.dateOut}
           users={smena.users}
           key={smena.id}
+          id={smena.id}
+          isActive={smena.active}
           setSmenaRecords={props.setSmenaRecords}
+          setActive={props.setActive}
         />
       )}
     )
@@ -21,6 +24,7 @@ function SmenaList(props) {
 SmenaList.propTypes = {
   smenaList:PropTypes.arrayOf(PropTypes.object).isRequired,
   setSmenaRecords:PropTypes.func,
+  setActive:PropTypes.func,
 }
 
 export default SmenaList;
