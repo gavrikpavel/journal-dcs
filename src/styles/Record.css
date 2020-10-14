@@ -1,0 +1,19 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    text-align: left;
+    border-bottom: 2px solid black;
+    cursor: pointer;
+}
+
+tbody td {
+    padding: 0.5em;
+    border-bottom: 1px solid #ccc;
+}
+
+tbody tr:hover {
+    background-color: #eee;
+}

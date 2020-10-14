@@ -7,10 +7,10 @@ function SmenaList(props) {
     props.smenaList.map((smena) => {
       return (
         <SmenaItem
+          key={smena.id}
           dateIn={smena.dateIn}
           dateOut={smena.dateOut}
           users={smena.users}
-          key={smena.id}
           id={smena.id}
           isActive={smena.active}
           setSmenaRecords={props.setSmenaRecords}

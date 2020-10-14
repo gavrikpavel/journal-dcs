@@ -2,9 +2,8 @@ import React, {useState, useEffect} from 'react';
 import moment from 'moment';
 import axios from 'axios';
 import SmenaList from './smena/SmenaList';
-import RecordList from './record/RecordList';
+import RecordTable from './record/RecordTable';
 import DatePicker from './DatePicker';
-
 import '../styles/App.css';
 
 function App() {
@@ -42,7 +41,7 @@ function App() {
     endDate= moment().format('YYYY-MM-DD hh:mm:ss')
   ) {
     if (endDate === null)  endDate= moment().format('YYYY-MM-DD hh:mm:ss');
-    records = initRecords;
+    records = initRecords.slice();
     setRecords(
       records.filter(record => moment(record.date).isBetween(startDate, endDate, undefined, '[]'))
     )
@@ -71,7 +70,7 @@ function App() {
         <SmenaList smenaList={smenaList} setSmenaRecords={showRecords} setActive={setActiveSmena} />
       </div>
       <div className="record-table">
-        <RecordList records={records} />
+        <RecordTable records={records} />
       </div>
       <div className="pinned-records">
         <div>1</div>
