@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import PropTypes from 'prop-types'
 import RecordItem from "./RecordItem";
 import '../../styles/Record.css';
-import moment from "moment";
 
 function RecordTable(props) {
   let [records, setRecords] = useState(props.records);
@@ -18,20 +17,20 @@ function RecordTable(props) {
     })
     setRecords(records);
   }, [props.records]);
-  
+
   function useSearchInput(field) {
-    let [value, setValue] = useState('');
+    let [str, setStr] = useState('');
     function handleSearch(e) {
-      setValue(e.target.value);
+      setStr(e.target.value);
+      const regPattern = new RegExp(`${e.target.value}`, 'gi');
       let sortRecords = props.records.slice();
       setRecords(
-        sortRecords.filter(record => record[field].includes(value))
+        sortRecords.filter(record => record[field].match(regPattern))
       );
-      console.log(value);
     }
-    return <input
-      value={value}
-      onChange={e => handleSearch(e)}
+    return <input className="search-input"
+      value={str}
+      onChange={(e) => handleSearch(e)}
       type='text'
       placeholder="&#128269;"
     />;
