@@ -8,7 +8,6 @@ import moment from "moment";
 import SignatureCanvas from 'react-signature-canvas';
 import Select from "react-select";
 
-
 function Smena(props) {
   let [date, setDate] = useState(new Date());
   let [time, setTime] = useState(moment().format('HH:mm'));
@@ -16,6 +15,8 @@ function Smena(props) {
   let [text, setText] = useState('');
   let [comment, setComment] = useState('');
   let [imgSignUrl, setImgSignUrl] = useState(null);
+  let [selectedUsers, setSelectedUsers] = useState([]);
+  let [allowSmena, setAllowSmena] = useState(true);
 
   let sigCanvas = useRef({});
 
@@ -25,20 +26,29 @@ function Smena(props) {
   }
 
   useEffect(() => {
+    setAllowSmena(
+      {
+        onSmena: !selectedUsers.some((user) => user.value === props.regUser) && selectedUsers,
+        takeSmena: props.smena.find(oneSmena => oneSmena.isEnd === 0) !== undefined
+      });
+    setText(
+      () => {
+        let str = selectedUsers.reduce((str, user) => str + ', ' + user.label, '') + ' принял(и) смену';
+        return str.slice(2);
+      });
+  }, [selectedUsers, props.smena]);
+
+  useEffect(() => {
     setRecord({
       date: moment(date).format('YYYY-MM-DD') + ' ' + time + ':00',
       text: text,
-      comment: comment,
+      comment: comment === '' ? 'Прием/Сдача смены' : comment,
       signature: imgSignUrl,
-      });
+    });
   }, [date, time, text, comment, imgSignUrl]);
 
-  function checkTakeSmena() {
-    return props.smena.find(oneSmena => oneSmena.isEnd === 0) === undefined;
-  }
-
-  function checkOnSmena(usersInSmena) {
-    return usersInSmena.some((user) => user === props.regUser)
+  function handleCommentChange(e) {
+    setComment(e.target.value)
   }
 
   function handleAddRecord() {
@@ -61,11 +71,14 @@ function Smena(props) {
 
   return(
     <Popup
-      // onOpen = {initSignature}
-      trigger={<button className="button"> Сдать смену </button>} modal>
+      //onOpen = {}
+      trigger={<button
+        className="button"
+        //disabled={allowSmena.takeSmena}
+      > Сдать смену </button>} modal>
       {close => (
         <div className="modal">
-          <div className="header"> Сдать смену </div>
+          <div className="header"> Смена </div>
           <div className="content">
             <form>
               <div className="field-record">
@@ -79,25 +92,29 @@ function Smena(props) {
                   input={<input placeholder={time} />}
                 />
               </div>
+              <Select
+                name="selectUsers"
+                className="basic-multi-select"
+                classNamePrefix="select"
+                placeholder="Выберите персонал в смене"
+                isMulti
+                isClearable={false}
+                onChange={setSelectedUsers}
+                options={props.users}
+              />
+              <br/>
               <div className="field-record">
-                <Select />
-              </div>
-              <div className="field-record">
-                <textarea
-                  rows="10"
-                  cols="40"
-                  placeholder="Введите текст"
-                  value={text}
-                />
-                <textarea
+                <textarea className="comment-smena"
                   rows="10"
                   cols="40"
                   placeholder="Введите комментарий"
                   value={comment}
+                  onChange={handleCommentChange}
                 />
               </div>
             </form>
           </div>
+          <span>Подпись</span>
             <div className="field-record" onClick={updateCanvas}>
               <SignatureCanvas
                 ref = {sigCanvas}
@@ -107,7 +124,10 @@ function Smena(props) {
                 }} />
             </div>
           <div className="field-record">
-            <button onClick={() => {handleAddRecord(); close()}}>Сохранить</button>
+            <button
+              //disabled={allowSmena.onSmena}
+              onClick={() => {handleAddRecord(); close()}}>
+              Сохранить</button>
             <button onClick={clearSignature}>Очистить подпись</button>
             <button onClick={() => {close(); handleClearFields()}}>Отмена</button>
           </div>
@@ -119,6 +139,9 @@ function Smena(props) {
 
 Smena.propTypes = {
   addRecord: PropTypes.func,
+  regUser: PropTypes.number.isRequired,
+  users: PropTypes.array.isRequired,
+  smena: PropTypes.array.isRequired,
 }
 
 export default Smena;

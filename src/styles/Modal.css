@@ -43,6 +43,10 @@
     resize: none;
 }
 
+.comment-smena {
+    height: 50px !important;
+}
+
 .field-record > button {
     width: 100px;
     height: 40px;

@@ -20,8 +20,8 @@ function App() {
   let [smenaList, setSmenaList] = useState([]);
   let [date, setDate] = useState(new Date());
   const ipUrl = 'http://192.168.71.111/api/journal/';
-  let users = [];
-  let idRegUser = 1;
+  const [users, setUsers] = useState([]);
+  const [regUser, setRegUser] = useState(1);
 
   /**
    * Получение данных
@@ -41,8 +41,8 @@ function App() {
             );
             setInitRecords(res.data.records);
             setRecords(res.data.records);
-            users = res.data.users;
-            idRegUser = res.data.regUser;
+            setUsers(res.data.users);
+            setRegUser(res.data.regUser);
         }
       })
       .catch(function() {
@@ -154,8 +154,9 @@ function App() {
         <AddRecord addRecord={addRecord} />
         <Smena
           users={users}
-          regUser={idRegUser}
+          regUser={regUser}
           smena={smenaList}
+          addRecord={addRecord}
         />
       </div>
       <div className="smena">
