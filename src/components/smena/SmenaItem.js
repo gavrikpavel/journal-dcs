@@ -14,7 +14,12 @@ function SmenaItem(props) {
   }
 
   return (
-    <div style={styles.div} onClick={() => { {props.setSmenaRecords(props.dateIn, props.dateOut); props.setActive(props.id)} }}>
+    <div style={styles.div} onClick={() => {
+      {
+        props.setSmenaRecords(props.dateIn, props.dateOut);
+        props.setActive(props.id)
+      }
+    }}>
       <p>{props.dateIn}</p>
       <p>{props.dateOut}</p>
       <ul>

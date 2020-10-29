@@ -55,7 +55,7 @@ function RecordTable(props) {
 
   function viewSorting(field) {
     if (field === fieldRow) {
-      return sort === 'asc' ? '⬆' : '⬇'
+      return sort === 'asc' ? '⬇' : '⬆'
     }
     return null
   }
@@ -69,8 +69,8 @@ function RecordTable(props) {
           {useSearchInput('text')}
         </th>
         <th onClick={() => handleSortClick('comment')}>Примечание {viewSorting('comment')}</th>
-        <th>Pinned</th>
         <th>Подпись</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -78,11 +78,13 @@ function RecordTable(props) {
           return (
             <RecordItem
               key={record.id}
+              id={record.id}
               date={record.date}
               text={record.text}
               comment={record.comment}
-              pinned={record.pinned}
               signature={record.signature}
+              pinned={record.pinned}
+              pinRecord={props.pinRecord}
             />
           )}
         )}
@@ -93,6 +95,7 @@ function RecordTable(props) {
 
 RecordTable.propTypes = {
   records:PropTypes.arrayOf(PropTypes.object).isRequired,
+  pinRecord:PropTypes.func
 }
 
 export default RecordTable;

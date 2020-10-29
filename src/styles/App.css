@@ -8,13 +8,14 @@ body {
 .journal {
     display: grid;
     grid-template-columns: 1fr 6fr 2fr;
-    grid-template-rows: 1fr 8fr ;
+    grid-template-rows: 1fr 32fr ;
     grid-gap: 1rem;
 }
 .tool-panel {
     border: 1px black solid;
     grid-column: 1 / 4;
     grid-row: 1;
+    /*max-height: 50px;*/
 }
 
 .smena {
@@ -29,12 +30,15 @@ body {
     border: 1px black solid;
 }
 
+.tool-panel {
+    display: flex;
+}
 
 @media all and (max-width: 650px) {
     .journal {
         display: grid;
         grid-template-columns: 1fr 6fr;
-        grid-template-rows: 1fr 8fr 2fr;
+        grid-template-rows: 1fr 16fr 4fr;
         grid-gap: 1rem;
     }
     .tool-panel {

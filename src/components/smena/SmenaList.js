@@ -8,10 +8,10 @@ function SmenaList(props) {
       return (
         <SmenaItem
           key={smena.id}
+          id={smena.id}
           dateIn={smena.dateIn}
           dateOut={smena.dateOut}
           users={smena.users}
-          id={smena.id}
           isActive={smena.active}
           setSmenaRecords={props.setSmenaRecords}
           setActive={props.setActive}

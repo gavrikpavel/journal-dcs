@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --open --hot",
     "buildProd": "webpack --mode production",
-    "buildDev": "webpack --mode development"
+    "buildDev": "webpack --mode development",
+    "fakeServer": "node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -32,10 +33,17 @@
   "dependencies": {
     "axios": "^0.20.0",
     "date-fns": "^2.16.1",
+    "json-server": "^0.16.2",
     "moment": "^2.29.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
-    "react-day-picker": "^7.4.8",
-    "react-dom": "^16.13.1"
+    "react-date-picker": "^8.0.3",
+    "react-dom": "^16.13.1",
+    "react-select": "^3.1.0",
+    "react-signature-canvas": "^1.0.3",
+    "react-simple-timefield": "^3.2.3",
+    "reactjs-popup": "^2.0.4",
+    "styled-components": "^5.2.0",
+    "sweetalert": "^2.1.2"
   }
 }

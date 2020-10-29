@@ -18,6 +18,15 @@ tbody tr:hover {
     background-color: #eee;
 }
 
+.td-pinned {
+    width: 20px;
+    text-align: right;
+}
+
+.td-pinned  button {
+    cursor: pointer;
+}
+
 .search-input {
     width: 12px;
     border: none;
@@ -31,4 +40,8 @@ tbody tr:hover {
 
 .search-input:focus {
     width: 50%;
+}
+
+.not-swap {
+    min-width: 96px;
 }
