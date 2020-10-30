@@ -143,6 +143,21 @@ function App() {
       });
   }
 
+  function setSmena(smena) {
+    const urlSmena  = smena.takeSmena ? 'take-smena' : 'give-smena'
+    const url = ipUrl + urlSmena + '?XDEBUG_SESSION_START=PHPSTORM'; //?XDEBUG_SESSION_START=PHPSTORM
+    axios.post(url, smena.users)
+      .then(res => {
+        if (res.data) {
+          setSmenaList(res.data);
+          addRecord(smena.record);
+        }
+      })
+      .catch(function() {
+        swal("Ошибка!", "Нет связи с сервером!", "error");
+      });
+  }
+
   return (
     <div className="journal">
       <div className="tool-panel">
@@ -156,7 +171,21 @@ function App() {
           users={users}
           regUser={regUser}
           smena={smenaList}
-          addRecord={addRecord}
+          setSmena={setSmena}
+          header="Принять смену"
+          nameButton="Принять"
+          disableSelect={false}
+          take={true}
+        />
+        <Smena
+          users={users}
+          regUser={regUser}
+          smena={smenaList}
+          setSmena={setSmena}
+          header="Сдать смену"
+          nameButton="Сдать"
+          disableSelect={true}
+          take={false}
         />
       </div>
       <div className="smena">

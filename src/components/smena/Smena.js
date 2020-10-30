@@ -17,6 +17,7 @@ function Smena(props) {
   let [imgSignUrl, setImgSignUrl] = useState(null);
   let [selectedUsers, setSelectedUsers] = useState([]);
   let [allowSmena, setAllowSmena] = useState(true);
+  let [usersSmena, setUsersSmena] = useState([]);
 
   let sigCanvas = useRef({});
 
@@ -26,16 +27,27 @@ function Smena(props) {
   }
 
   useEffect(() => {
-    setAllowSmena(
-      {
-        onSmena: !selectedUsers.some((user) => user.value === props.regUser) && selectedUsers,
-        takeSmena: props.smena.find(oneSmena => oneSmena.isEnd === 0) !== undefined
-      });
-    setText(
-      () => {
-        let str = selectedUsers.reduce((str, user) => str + ', ' + user.label, '') + ' принял(и) смену';
-        return str.slice(2);
-      });
+      if (props.take) {
+        setAllowSmena(
+          {
+            disabledModalSmena: props.smena.find(oneSmena => oneSmena.isEnd === 0) !== undefined,
+            disabledSaveSmena: !selectedUsers.some((user) => user.value === props.regUser) && selectedUsers,
+          });
+      } else {
+        setAllowSmena(
+          {
+            disabledModalSmena: props.smena.find(oneSmena => oneSmena.isEnd === 0) === undefined,
+            disabledSaveSmena: false //TODO RegUser равняется одному из пользователей в смене
+          });
+      }
+
+      const operation = props.take ? ' принял(и) смену' : ' сдал(и) смену';
+
+      setText(
+        () => {
+          let str = selectedUsers.reduce((str, user) => str + ', ' + user.label, '') + operation;
+          return str.slice(2);
+        });
   }, [selectedUsers, props.smena]);
 
   useEffect(() => {
@@ -53,7 +65,13 @@ function Smena(props) {
 
   function handleAddRecord() {
     setImgSignUrl(sigCanvas.current.getTrimmedCanvas().toDataURL("image/png"));
-    props.addRecord(record);
+    props.setSmena({
+      users: selectedUsers.map((user) => user.value),
+      takeSmena: props.take,
+      record: record
+    });
+    //}, props.addRecord(record));
+    //props.addRecord(record);
     handleClearFields();
   }
 
@@ -74,11 +92,11 @@ function Smena(props) {
       //onOpen = {}
       trigger={<button
         className="button"
-        //disabled={allowSmena.takeSmena}
-      > Сдать смену </button>} modal>
+        disabled={allowSmena.disabledModalSmena}
+      >{props.header}</button>} modal>
       {close => (
         <div className="modal">
-          <div className="header"> Смена </div>
+          <div className="header">{props.header}</div>
           <div className="content">
             <form>
               <div className="field-record">
@@ -86,10 +104,11 @@ function Smena(props) {
                   clearIcon={null}
                   onChange={setDate}
                   value={date}
+                  disabled={true}
                 />
                 <TimeField
                   value={time}
-                  input={<input placeholder={time} />}
+                  input={<input placeholder={time} disabled={true} />}
                 />
               </div>
               <Select
@@ -98,8 +117,10 @@ function Smena(props) {
                 classNamePrefix="select"
                 placeholder="Выберите персонал в смене"
                 isMulti
+                isDisabled={props.disableSelect}
                 isClearable={false}
                 onChange={setSelectedUsers}
+                defaultValue={[props.users[1], props.users[5]]}
                 options={props.users}
               />
               <br/>
@@ -125,9 +146,9 @@ function Smena(props) {
             </div>
           <div className="field-record">
             <button
-              //disabled={allowSmena.onSmena}
-              onClick={() => {handleAddRecord(); close()}}>
-              Сохранить</button>
+              disabled={allowSmena.disabledSaveSmena}
+              onClick={() => {handleAddRecord(); close()}}
+            >{props.nameButton}</button>
             <button onClick={clearSignature}>Очистить подпись</button>
             <button onClick={() => {close(); handleClearFields()}}>Отмена</button>
           </div>
@@ -138,10 +159,14 @@ function Smena(props) {
 }
 
 Smena.propTypes = {
-  addRecord: PropTypes.func,
+  setSmena: PropTypes.func,
   regUser: PropTypes.number.isRequired,
   users: PropTypes.array.isRequired,
   smena: PropTypes.array.isRequired,
+  header: PropTypes.string.isRequired,
+  nameButton: PropTypes.string.isRequired,
+  disableSelect: PropTypes.bool.isRequired,
+  take: PropTypes.bool.isRequired,
 }
 
 export default Smena;
