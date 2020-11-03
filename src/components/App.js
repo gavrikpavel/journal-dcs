@@ -145,13 +145,25 @@ function App() {
 
   function setSmena(smena) {
     const urlSmena  = smena.takeSmena ? 'take-smena' : 'give-smena'
-    const url = ipUrl + urlSmena + '?XDEBUG_SESSION_START=PHPSTORM'; //?XDEBUG_SESSION_START=PHPSTORM
+    const url = ipUrl + urlSmena; //?XDEBUG_SESSION_START=PHPSTORM
     axios.post(url, smena.users)
       .then(res => {
         if (res.data) {
           setSmenaList(res.data);
           addRecord(smena.record);
         }
+      })
+      .catch(function() {
+        swal("Ошибка!", "Нет связи с сервером!", "error");
+      });
+  }
+
+  function logout() {
+    const url = 'http://192.168.71.111/auth/logout/'; //?XDEBUG_SESSION_START=PHPSTORM
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    axios.post(url)
+      .then(res => {
+        swal("выход", "info");
       })
       .catch(function() {
         swal("Ошибка!", "Нет связи с сервером!", "error");

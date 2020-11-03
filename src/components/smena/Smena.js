@@ -17,38 +17,63 @@ function Smena(props) {
   let [imgSignUrl, setImgSignUrl] = useState(null);
   let [selectedUsers, setSelectedUsers] = useState([]);
   let [allowSmena, setAllowSmena] = useState(true);
-  let [usersSmena, setUsersSmena] = useState([]);
+  let [usersInSmena, setUsersInSmena] = useState([]);
+  let [check, setCheck] = useState(true);
 
   let sigCanvas = useRef({});
 
   const  clearSignature = () => {
     sigCanvas.current.clear();
     setImgSignUrl(null);
-  }
+  };
+
+  useEffect(() => {
+    let lastSmena = props.smena.find(oneSmena => oneSmena.isEnd === 0);
+    if (lastSmena !== undefined && !props.take) {
+      setUsersInSmena(lastSmena.users.map(userSmena => props.users.find(user => user.label === userSmena)).filter(Boolean));
+    }
+  }, [props.smena, props.users]);
+
+  useEffect(() => {
+    if (usersInSmena && !props.take) {
+      if (usersInSmena.find(user => user.value === props.regUser) === undefined) {
+        setCheck(true);
+      } else setCheck(false)
+    }
+  }, [usersInSmena]);
+
 
   useEffect(() => {
       if (props.take) {
         setAllowSmena(
           {
             disabledModalSmena: props.smena.find(oneSmena => oneSmena.isEnd === 0) !== undefined,
-            disabledSaveSmena: !selectedUsers.some((user) => user.value === props.regUser) && selectedUsers,
+            disabledSaveSmena: !selectedUsers.some(user => user.value === props.regUser) && selectedUsers,
+          });
+        setUsersInSmena([]);
+
+        setText(
+          () => {
+            let str = selectedUsers.reduce((str, user) => str + ', ' + user.label, '') + operation;
+            return str.slice(2);
           });
       } else {
         setAllowSmena(
           {
             disabledModalSmena: props.smena.find(oneSmena => oneSmena.isEnd === 0) === undefined,
-            disabledSaveSmena: false //TODO RegUser равняется одному из пользователей в смене
+            disabledSaveSmena: check,
+          });
+        setSelectedUsers(usersInSmena);
+        setText(
+          () => {
+            let str = usersInSmena.reduce((str, user) => str + ', ' + user.label, '') + operation;
+            return str.slice(2);
           });
       }
 
       const operation = props.take ? ' принял(и) смену' : ' сдал(и) смену';
 
-      setText(
-        () => {
-          let str = selectedUsers.reduce((str, user) => str + ', ' + user.label, '') + operation;
-          return str.slice(2);
-        });
-  }, [selectedUsers, props.smena]);
+  }, [selectedUsers, props.smena, props.users, check]);
 
   useEffect(() => {
     setRecord({
@@ -70,8 +95,6 @@ function Smena(props) {
       takeSmena: props.take,
       record: record
     });
-    //}, props.addRecord(record));
-    //props.addRecord(record);
     handleClearFields();
   }
 
@@ -120,7 +143,7 @@ function Smena(props) {
                 isDisabled={props.disableSelect}
                 isClearable={false}
                 onChange={setSelectedUsers}
-                defaultValue={[props.users[1], props.users[5]]}
+                defaultValue={usersInSmena}
                 options={props.users}
               />
               <br/>
