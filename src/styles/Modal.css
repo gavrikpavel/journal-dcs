@@ -1,3 +1,30 @@
+.j-btn {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    margin: 2px 0;
+    border: solid 1px transparent;
+    border-radius: 4px;
+    padding: 0.5em 1em;
+    cursor: pointer;
+}
+
+.add {
+    color: #ffffff;
+    background-color: #81c784;
+}
+
+.take {
+    color: #000000;
+    background-color: #bbdefb;
+}
+
+.give {
+    color: #ffffff;
+    background-color: #90a4ae;
+}
+
+
 .modal {
     padding: 20px;
     overflow-y: auto;

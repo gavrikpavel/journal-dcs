@@ -114,7 +114,7 @@ function Smena(props) {
     <Popup
       //onOpen = {}
       trigger={<button
-        className="button"
+        className={props.take ? 'j-btn take':'j-btn give'}
         disabled={allowSmena.disabledModalSmena}
       >{props.header}</button>} modal>
       {close => (

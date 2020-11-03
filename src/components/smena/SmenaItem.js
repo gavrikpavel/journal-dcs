@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 function SmenaItem(props) {
   const styles = {
     div: {
-      border: '1px solid black',
+      //border: '1px solid black',
       cursor: 'pointer',
       background: props.isActive ? '#4dd0e1' : '#f8f8f8',
       boxShadow: '0 1px 5px rgba(0,0,0,0.25), 0 1px 1px rgba(0,0,0,0.22)',

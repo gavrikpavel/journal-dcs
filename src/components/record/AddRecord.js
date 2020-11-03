@@ -71,7 +71,7 @@ function AddRecord(props) {
   return(
     <Popup
       onOpen = {initSignature}
-      trigger={<button className="button"> Создать запись </button>} modal>
+      trigger={<button className="j-btn add"> Создать запись </button>} modal>
       {close => (
         <div className="modal">
           <div className="header"> Создать запись в журнале </div>

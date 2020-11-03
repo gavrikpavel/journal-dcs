@@ -151,19 +151,10 @@ function App() {
         if (res.data) {
           setSmenaList(res.data);
           addRecord(smena.record);
+          if (!smena.takeSmena) {
+            window.location.reload();
+          }
         }
-      })
-      .catch(function() {
-        swal("Ошибка!", "Нет связи с сервером!", "error");
-      });
-  }
-
-  function logout() {
-    const url = 'http://192.168.71.111/auth/logout/'; //?XDEBUG_SESSION_START=PHPSTORM
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    axios.post(url)
-      .then(res => {
-        swal("выход", "info");
       })
       .catch(function() {
         swal("Ошибка!", "Нет связи с сервером!", "error");
