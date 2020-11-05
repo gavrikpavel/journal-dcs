@@ -1,12 +1,17 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: "./src/index.js",
     output: {
         path: path.join(__dirname, "/dist"),
         filename: "ppjr.js"
+    },
+    mode: 'production',
+    optimization: {
+        minimizer: [new TerserPlugin({})],
     },
     module: {
         rules: [
@@ -26,7 +31,8 @@ module.exports = {
         compress: true,
         port: 3000
     },
-    devtool: 'eval-source-map',
+    //devtool: 'eval-source-map',
+    devtool: 'inline-source-map',
     plugins: [
         new HtmlWebpackPlugin({
             template: "./src/index.html"

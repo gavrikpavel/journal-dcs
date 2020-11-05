@@ -20,6 +20,7 @@ function App() {
   let [smenaList, setSmenaList] = useState([]);
   let [date, setDate] = useState(new Date());
   const ipUrl = 'http://192.168.71.111/api/journal/';
+  //const ipUrl = 'http://196.90.201.181:8081/api/journal/';
   const [users, setUsers] = useState([]);
   const [regUser, setRegUser] = useState(1);
 
@@ -150,15 +151,26 @@ function App() {
       .then(res => {
         if (res.data) {
           setSmenaList(res.data);
-          addRecord(smena.record);
-          if (!smena.takeSmena) {
-            window.location.reload();
-          }
+          const addSmenaRecord = new Promise(resolve => {
+            addRecord(smena.record);
+              resolve(logout(smena.takeSmena));
+          });
         }
       })
       .catch(function() {
         swal("Ошибка!", "Нет связи с сервером!", "error");
       });
+  }
+
+  function logout(takeSmena) {
+    const url = ipUrl + 'logout'; //?XDEBUG_SESSION_START=PHPSTORM
+    if (!takeSmena) {
+      axios.post(url)
+        .then(res => {
+          console.log(res.data);
+          window.location.reload();
+        })
+    }
   }
 
   return (
